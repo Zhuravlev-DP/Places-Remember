@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load static %}
+{% block content %}
+
+<style>
+.index {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 100px;
+    border-radius: 500px;
+    padding: 10px;
+    color: #272b38;
+    background-color: #cac7bc;
+}
+
+.intro {
+    text-align: justify;
+    margin-top: 20px;
+    border-radius: 10px;
+    padding: 20px;
+    color: #272b38;
+    font-family: 'Bangers', sans-serif;
+    font-size: 25px;
+    line-height: 3;
+    margin-bottom: 200px;
+}
+
+.intro p:first-child {
+    margin-top: 0;
+}
+
+.sign-in {
+    text-align: center;
+}
+
+
+.btn-vk {
+    background-color: #3399ff;
+}
+
+.button-icon {
+    vertical-align: middle;
+}
+
+</style>
+
+<div class="index">
+    <h1>Добро пожаловать на сайт!</h1>
+</div>
+
+<div class="intro">
+    <p>При помощи данного сайта вы можете хранить свои впечатления о посещаемых местах.</p>
+</div>
+
+<div class="sign-in">
+    <a class="btn btn-vk" href="{% provider_login_url 'vk' %}">
+        <img alt="VK Logo" class="button-icon"
+             src="{% static 'images/VK_Compact_Logo.svg' %}">
+        Войти через VK
+    </a>
+</div>
+
+{% endblock %}

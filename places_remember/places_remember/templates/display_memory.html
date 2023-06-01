@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if memory.user == user %}
+
+<h1 style="margin-bottom: 20px; color: #272b38;">Просмотреть место</h1>
+<div style="display: flex;">
+    <div id="map" style="height: 400px; width: 900px; margin-top: 0px; text-align: center;">
+        <label style="font-size: 15pt;">Установите метку</label>
+    </div>
+
+    <form method="POST" style="margin-left: 20px;">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.place.id_for_label }}"
+                   style="width: 500px; text-align: center; font-size: 15pt; color: #272b38;">Название места</label><br>
+            {{ form.name }}
+        </div>
+        <div>
+            <label for="{{ form.comment.id_for_label }}"
+                   style="width: 500px; text-align: center; font-size: 15pt; color: #272b38;">Описание места</label><br>
+            {{ form.comment }}
+        </div>
+        <input id="longitude" name="longitude" type="hidden">
+        <input id="latitude" name="latitude" type="hidden">
+        <button class="btn btn-light"
+                style="width: 500px; height: 60px; font-size: 15pt; color: #272b38;"
+                type="submit">Сохранить
+        </button>
+    </form>
+</div>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=c26f7491-0e24-4329-bf1d-91a9104a968b&lang=ru_RU"
+        type="text/javascript"></script>
+
+<script>
+ymaps.ready(function() {
+  var map = new ymaps.Map("map", {
+    center: [{{ memory.longitude }}, {{ memory.latitude }}],
+    zoom: 10
+  });
+
+  var placemark;
+
+  {% if memory.latitude and memory.longitude %}
+    var placemarkCoords = [{{ memory.longitude }}, {{ memory.latitude }}];
+    placemark = new ymaps.Placemark(placemarkCoords);
+    map.geoObjects.add(placemark);
+    map.setCenter(placemarkCoords, 10);
+    var longitude = {{ memory.longitude }};
+    var latitude = {{ memory.latitude }};
+    document.getElementById('longitude').value = longitude;
+    document.getElementById('latitude').value = latitude;
+  {% endif %}
+
+  map.events.add('click', function(e) {
+    var coords = e.get('coords');
+    longitude = coords[0];
+    latitude = coords[1];
+    if (placemark) {
+      placemark.geometry.setCoordinates(coords);
+    } else {
+      placemark = new ymaps.Placemark(coords);
+      map.geoObjects.add(placemark);
+    }
+
+    document.getElementById('longitude').value = longitude;
+    document.getElementById('latitude').value = latitude;
+  });
+});
+
+</script>
+
+{% else %}
+
+<h1 style="margin-bottom: 30px; color: #272b38;">You do not have access to this
+    memory!</h1>
+
+{% endif %}
+
+{% endblock %}

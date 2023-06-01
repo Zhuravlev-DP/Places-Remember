@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+.centered-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.memory-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.memory-list li {
+    margin-bottom: 10px;
+    border-radius: 25px;
+    width: 400px;
+}
+
+.memory-list li a {
+    font-size: 15pt;
+    width: 100%;
+}
+
+.profile-picture {
+    width: 250px;
+    height: 250px;
+    border-radius: 60%;
+}
+
+.add-memory-button {
+    width: 300px;
+    font-size: 20pt;
+}
+
+.no-memories-message {
+    margin-top: 20px;
+}
+
+</style>
+<div class="profile-header">
+    <div class="centered-content">
+        <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+        <img alt="Profile Picture" class="profile-picture"
+             src="{{ profile_picture }}">
+    </div>
+</div>
+
+<div class="centered-content">
+    <a class="btn btn-light add-memory-button" style="background-color: #a4a5a5;" href="{% url 'add_memory' %}">Добавить новое место</a><br>
+
+    {% if memories %}
+    <ul class="memory-list">
+        {% for memory in memories %}
+        <li>
+            <a class="btn btn-outline-dark"
+               href="{% url 'display_memory' memory.id %}">{{ memory }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <h2 class="no-memories-message">Список мест пуст</h2>
+    {% endif %}
+</div>
+
+{% endblock %}
